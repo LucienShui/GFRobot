@@ -6,6 +6,6 @@ COPY . /app
 
 WORKDIR /app
 
-RUN pip -i https://mirrors.aliyun.com/pypi/simple/ install -r /app/requirements.txt
+RUN pip install -i https://mirrors.aliyun.com/pypi/simple/ -r /app/requirements.txt
 
 CMD ["python", "main.py"]

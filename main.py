@@ -9,7 +9,8 @@ import schedule
 from chinese_calendar import is_workday
 from dingtalkchatbot.chatbot import DingtalkChatbot
 
-logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s:%(name)s:%(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s:%(name)s:%(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S')
 logger: logging.Logger = logging.getLogger('GFRobot')
 
 
@@ -52,11 +53,14 @@ def setup():
 
 def main():
     setup()
-    send_message('大家好，我是干饭机器人，我将带头干饭！')
-    logger.info('setup success, cron start')
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
+    json_response: dict = send_message('大家好，我是干饭机器人，我将带头干饭！')
+    if json_response.get('errcode', 0) != 0:
+        logger.info('service start fail')
+    else:
+        logger.info('service start success, cron start')
+        while True:
+            schedule.run_pending()
+            time.sleep(1)
 
 
 if __name__ == '__main__':
