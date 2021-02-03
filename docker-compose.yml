@@ -1,0 +1,8 @@
+version: "3"
+
+services:
+  gf-robot:
+    build: .
+    container_name: gf-robot
+    volumes:
+      - ./config.json:/app/config.json
