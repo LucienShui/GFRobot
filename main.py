@@ -15,7 +15,7 @@ logger: logging.Logger = logging.getLogger('GFRobot')
 
 
 class Config:
-    def __init__(self, filename: str = 'config.example.json'):
+    def __init__(self, filename: str = 'config.json'):
         with open(filename) as file:
             json_config: dict = json.load(file)
 
