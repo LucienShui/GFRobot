@@ -3,8 +3,16 @@ version: "3"
 services:
   gf-robot:
     build: .
+    image: gf-robot-runtime:latest
     container_name: gf-robot
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "ps", "|", "grep", "-v", "grep", "|", "grep", "python"]
+      interval: 45s
+      timeout: 3s
+      retries: 3
     environment:
       - TZ=Asia/Shanghai
     volumes:
       - .:/app
+
