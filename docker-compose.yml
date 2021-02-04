@@ -7,7 +7,7 @@ services:
     container_name: gf-robot
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "ps", "|", "grep", "-v", "grep", "|", "grep", "python"]
+      test: ["CMD-SHELL", "ps | grep -v grep | grep python"]
       interval: 45s
       timeout: 3s
       retries: 3
