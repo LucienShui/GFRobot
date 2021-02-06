@@ -3,7 +3,7 @@ import logging
 import random
 import time
 import typing
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import schedule
 from chinese_calendar import is_workday
@@ -27,9 +27,6 @@ class Config:
         logger.info('config load success')
 
 
-config: Config = Config()
-
-
 def send_message(message: str, is_at_all: bool = False) -> dict:
     webhook: str = f'https://oapi.dingtalk.com/robot/send?access_token={config.token}'
     robot: DingtalkChatbot = DingtalkChatbot(webhook, secret=config.secret)
@@ -39,16 +36,33 @@ def send_message(message: str, is_at_all: bool = False) -> dict:
     return result
 
 
-def gan_fan():
-    if is_workday(datetime.now()):
+def check(now: datetime) -> bool:
+    """
+    判断此时此刻是否需要干饭
+    :return:
+    """
+    if not is_workday(now):
+        # 如果今天休息，那么不干饭
+        return False
+
+    if now.hour == 22 and not is_workday(now + timedelta(days=1)):
+        # 如果此时此刻应该拿夜宵，但是明天不是工作日，那么就不提醒拿夜宵
+        return False
+
+    return True
+
+
+def gan_fan(config: Config):
+    if check(datetime.now()):
         send_message(message=random.choice(config.sentences) + config.suffix, is_at_all=True)
     else:
         logger.info('skipped')
 
 
 def setup():
+    config: Config = Config()
     for hour in ['11', '17', '20']:
-        schedule.every().day.at(f'{hour}:55').do(gan_fan)
+        schedule.every().day.at(f'{hour}:55').do(gan_fan, config)
 
 
 def main():
