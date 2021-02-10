@@ -27,6 +27,9 @@ class Config:
         logger.info('config load success')
 
 
+config: Config = Config()
+
+
 def send_message(message: str, is_at_all: bool = False) -> dict:
     webhook: str = f'https://oapi.dingtalk.com/robot/send?access_token={config.token}'
     robot: DingtalkChatbot = DingtalkChatbot(webhook, secret=config.secret)
@@ -52,7 +55,7 @@ def check(now: datetime) -> bool:
     return True
 
 
-def gan_fan(config: Config):
+def gan_fan():
     if check(datetime.now()):
         send_message(message=random.choice(config.sentences) + config.suffix, is_at_all=True)
     else:
@@ -60,7 +63,6 @@ def gan_fan(config: Config):
 
 
 def setup():
-    config: Config = Config()
     for hour in ['11', '17', '20']:
         schedule.every().day.at(f'{hour}:55').do(gan_fan, config)
 
