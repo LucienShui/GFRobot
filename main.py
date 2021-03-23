@@ -19,6 +19,7 @@ class Config:
         with open(filename) as file:
             json_config: dict = json.load(file)
 
+        self.alarm_clock: list = json_config['alarm_clock']
         self.token: str = json_config['token']
         self.secret: str = json_config['secret']
         self.sentences: typing.List[str] = json_config['sentences']
@@ -48,7 +49,7 @@ def check(now: datetime) -> bool:
         # 如果今天休息，那么不干饭
         return False
 
-    if now.hour == 22 and not is_workday(now + timedelta(days=1)):
+    if now.hour == 20 and not is_workday(now + timedelta(days=1)):
         # 如果此时此刻应该拿夜宵，但是明天不是工作日，那么就不提醒拿夜宵
         return False
 
@@ -63,8 +64,8 @@ def gan_fan():
 
 
 def setup():
-    for hour in ['11', '17', '20']:
-        schedule.every().day.at(f'{hour}:55').do(gan_fan, config)
+    for alarm_clock in config.alarm_clock:
+        schedule.every().day.at(alarm_clock).do(gan_fan, config)
 
 
 def main():

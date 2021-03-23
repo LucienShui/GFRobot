@@ -1,4 +1,9 @@
 {
+  "alarm_clock": [
+    "11:50",
+    "17:50",
+    "20:55"
+  ],
   "token": "",
   "secret": "",
   "sentences": [
