@@ -65,7 +65,7 @@ def gan_fan():
 
 def setup():
     for alarm_clock in config.alarm_clock:
-        schedule.every().day.at(alarm_clock).do(gan_fan, config)
+        schedule.every().day.at(alarm_clock).do(gan_fan)
 
 
 def main():
