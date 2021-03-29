@@ -70,14 +70,10 @@ def setup():
 
 def main():
     setup()
-    json_response: dict = send_message('大家好，我是干饭机器人，我将带头干饭！')
-    if json_response.get('errcode', 0) != 0:
-        logger.info('service start fail')
-    else:
-        logger.info('service start success, cron start')
-        while True:
-            schedule.run_pending()
-            time.sleep(1)
+    logger.info('service start success, cron start')
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
 
 
 if __name__ == '__main__':
